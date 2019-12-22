@@ -33,7 +33,7 @@ app.get('/api/members/:id', (req, res) => {
   } else {
 
     res.json(members[(index)])
-    
+
   }
 })
 
@@ -45,6 +45,44 @@ app.get('/api/members', (req, res) => {
   } else {
 
     res.json(members)
+
+  }
+})
+
+app.put('/api/members/:id', (req, res) => {
+  let index = getIndex(req.params.id);
+
+  if(typeof(index) == 'string') {
+
+    res.json(error(index))
+
+  } else {
+
+    let same = false;
+
+    for(let i = 0; i < members.length; i++) {
+
+      if(req.body.name == members[i].name && req.params.id != members[i].id) {
+
+        same = true;
+
+        break;
+
+      }
+    }
+
+    if(same) {
+
+      res.json(error('Same name'))
+
+    } else {
+
+      members[index].name = req.body.name;
+      
+      res.json(success(true))
+
+    }
+    
 
   }
 })

@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser')
-const statusMessage = require('functions/statusMessage')
+const {success, error} = require('functions/statusMessage')
 
 app.use(morgan('dev')); //middleware
 app.use(bodyParser.json()); // for parsing application/json
@@ -24,14 +24,28 @@ const members = [
 ]
 
 app.get('/api/members/:id', (req, res) => {
-  res.json(members[(req.params.id)])
+  let index = getIndex(req.params.id);
+
+  if(typeof(index) == 'string') {
+
+    res.json(error(index))
+
+  } else {
+
+    res.json(members[(index)])
+    
+  }
 })
 
 app.get('/api/members', (req, res) => {
   if(req.query.max != undefined && req.query.max > 0) {
+
     res.json(members.slice(0, req.query.max))
+
   } else {
+
     res.json(members)
+
   }
 })
 
@@ -40,11 +54,12 @@ app.post('/api/members', (req, res) => {
   if(req.body.name) {
 
     let sameName = false;
+
     for(let i = 0; i < members.length; i++) {
 
       if(members[i].name == req.body.name) {
 
-        res.json(statusMessage.error('Name already taken'))
+        res.json(error('Name already taken'))
         
         sameName = true;
 
@@ -54,7 +69,7 @@ app.post('/api/members', (req, res) => {
 
     if (sameName) {
 
-      res.json(statusMessage.error('No name value'))
+      res.json(error('No name value'))
 
     } else {
 
@@ -66,7 +81,7 @@ app.post('/api/members', (req, res) => {
   
       members.push(member)
   
-      res.json(statusMessage.success(member))
+      res.json(success(member))
 
     }
   } 
@@ -76,3 +91,12 @@ app.post('/api/members', (req, res) => {
 app.listen(8080, () => {
   console.log('started on port 8080')
 })
+
+function getIndex(id) {
+  for(let i = 0; i < members.length; i++) {
+    if(members[i].id == id) {
+      return i;
+    }
+  }
+  return 'Wrong ID';
+}

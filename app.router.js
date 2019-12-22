@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
+const config = require('./config')
 const bodyParser = require('body-parser')
 const {success, error} = require('functions/statusMessage')
 
@@ -27,7 +28,7 @@ const members = [
  * Show all the members
  */
 
-app.get('/api/members', (req, res) => {
+app.get(config.rootAPI + 'members', (req, res) => {
   if(req.query.max != undefined && req.query.max > 0) {
 
     res.json(members.slice(0, req.query.max))
@@ -44,7 +45,7 @@ app.get('/api/members', (req, res) => {
  * Show the member with id of the params
  */
 
-app.get('/api/members/:id', (req, res) => {
+app.get(config.rootAPI + 'members/:id', (req, res) => {
 
   let index = getIndex(req.params.id);
 
@@ -64,7 +65,7 @@ app.get('/api/members/:id', (req, res) => {
  * Edit/Update the member with id of the params
  */
 
-app.put('/api/members/:id', (req, res) => {
+app.put(config.rootAPI + 'members/:id', (req, res) => {
 
   let index = getIndex(req.params.id);
 
@@ -105,7 +106,7 @@ app.put('/api/members/:id', (req, res) => {
  * Create a new member
  */
 
-app.post('/api/members', (req, res) => {
+app.post(config.rootAPI + 'members', (req, res) => {
 
   if(req.body.name) {
 
@@ -147,7 +148,7 @@ app.post('/api/members', (req, res) => {
  * Delete the member with id of the params
  */
 
- app.delete('/api/members/:id', (req, res) => {
+ app.delete(config.rootApi + 'members/:id', (req, res) => {
   let index = getIndex(req.params.id);
 
   if(typeof(index) == 'string') {
@@ -167,8 +168,8 @@ app.post('/api/members', (req, res) => {
  * Config port listening 
  */
 
-app.listen(8080, () => {
-  console.log('started on port 8080')
+app.listen(config.port, () => {
+  console.log('started on port ' + config.port)
 })
 
 

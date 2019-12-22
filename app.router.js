@@ -23,19 +23,9 @@ const members = [
   },
 ]
 
-app.get('/api/members/:id', (req, res) => {
-  let index = getIndex(req.params.id);
-
-  if(typeof(index) == 'string') {
-
-    res.json(error(index))
-
-  } else {
-
-    res.json(members[(index)])
-
-  }
-})
+/**
+ * Show all the members
+ */
 
 app.get('/api/members', (req, res) => {
   if(req.query.max != undefined && req.query.max > 0) {
@@ -49,7 +39,33 @@ app.get('/api/members', (req, res) => {
   }
 })
 
+
+/**
+ * Show the member with id of the params
+ */
+
+app.get('/api/members/:id', (req, res) => {
+
+  let index = getIndex(req.params.id);
+
+  if(typeof(index) == 'string') {
+
+    res.json(error(index))
+
+  } else {
+
+    res.json(members[(index)])
+
+  }
+})
+
+
+/**
+ * Edit/Update the member with id of the params
+ */
+
 app.put('/api/members/:id', (req, res) => {
+  
   let index = getIndex(req.params.id);
 
   if(typeof(index) == 'string') {
@@ -82,10 +98,12 @@ app.put('/api/members/:id', (req, res) => {
       res.json(success(true))
 
     }
-    
-
   }
 })
+
+/**
+ * Create a new member
+ */
 
 app.post('/api/members', (req, res) => {
 
@@ -124,6 +142,10 @@ app.post('/api/members', (req, res) => {
     }
   } 
 })
+
+/**
+ * Config port listening 
+ */
 
 
 app.listen(8080, () => {

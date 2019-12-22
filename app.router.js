@@ -35,7 +35,7 @@ app.get(config.rootAPI + 'members', (req, res) => {
 
   } else {
 
-    res.json(members)
+    res.json(success(members))
 
   }
 })
@@ -55,7 +55,7 @@ app.get(config.rootAPI + 'members/:id', (req, res) => {
 
   } else {
 
-    res.json(members[(index)])
+    res.json(success(members[(index)]))
 
   }
 })

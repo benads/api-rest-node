@@ -20,14 +20,14 @@ const members = [
 ]
 
 app.get('/api/members/:id', (req, res) => {
-  res.send(members[(req.params.id)])
+  res.json(members[(req.params.id)])
 })
 
 app.get('/api/members', (req, res) => {
   if(req.query.max != undefined && req.query.max > 0) {
-    res.send(members.slice(0, req.query.max))
+    res.json(members.slice(0, req.query.max))
   } else {
-    res.send(members)
+    res.json(members)
   }
 })
 

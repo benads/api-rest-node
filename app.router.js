@@ -65,7 +65,7 @@ app.get('/api/members/:id', (req, res) => {
  */
 
 app.put('/api/members/:id', (req, res) => {
-  
+
   let index = getIndex(req.params.id);
 
   if(typeof(index) == 'string') {
@@ -131,7 +131,7 @@ app.post('/api/members', (req, res) => {
 
       let member = 
       {
-        id: members.length + 1,
+        id: createId(),
         name: req.body.name
       } 
   
@@ -143,14 +143,34 @@ app.post('/api/members', (req, res) => {
   } 
 })
 
+/***
+ * Delete the member with id of the params
+ */
+
+ app.delete('/api/members/:id', (req, res) => {
+  let index = getIndex(req.params.id);
+
+  if(typeof(index) == 'string') {
+
+    res.json(error(index))
+
+  } else {
+
+    members.splice(index, 1)
+
+    res.json(success(members))
+
+  }
+})
+
 /**
  * Config port listening 
  */
 
-
 app.listen(8080, () => {
   console.log('started on port 8080')
 })
+
 
 function getIndex(id) {
   for(let i = 0; i < members.length; i++) {
@@ -159,4 +179,8 @@ function getIndex(id) {
     }
   }
   return 'Wrong ID';
+}
+
+function createId() {
+  return members[members.length-1].id + 1;
 }

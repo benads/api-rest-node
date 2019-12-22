@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
+const statusMessage = require('functions/statusMessage');
 
 app.use(morgan('dev')); //middleware
 
@@ -20,14 +21,17 @@ const members = [
 ]
 
 app.get('/api/members/:id', (req, res) => {
-  res.json(members[(req.params.id)])
+  res.json(statusMessage.success(members[(req.params.id)]))
 })
 
 app.get('/api/members', (req, res) => {
+  console.log(req.query.max);
   if(req.query.max != undefined && req.query.max > 0) {
-    res.json(members.slice(0, req.query.max))
+    res.json(statusMessage.success(members.slice(0, req.query.max)))
+  } else if(req.query.max != undefined) {
+    res.json(statusMessage.error('Wrong value'))
   } else {
-    res.json(members)
+    res.json(statusMessage.success(members))
   }
 })
 
